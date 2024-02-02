@@ -1,0 +1,60 @@
+﻿@page
+@model CustomersModel
+@{
+    ViewData["Title"] = "Customers List";
+}
+<h1>@ViewData["Title"] (@Model.Customers.Count)</h1>
+
+<table id="customersTable" class="display" style="width:100%">
+    <thead>
+    <tr>
+        <th rowspan=2>Prenom</th>
+        <th rowspan=2>Nom</th>
+        <th rowspan=2>Téléphone</th>
+        <th rowspan=2>Email</th>
+        <th rowspan=2>Rue</th>
+        <th rowspan=2>Ville</th>
+        <th rowspan=2>Etat</th>
+        <th rowspan=2>Code Postal</th>
+        <th colspan=4>NB Comandes</th>
+    </tr>
+    <tr>
+        <td>Nb rejected</td>
+        <td>Nb pending</td>
+        <td>Nb processing</td>
+        <td>Nb completed</td>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var customer in Model.Customers)
+    {
+        <tr>
+            <td>@customer.FirstName</td>
+            <td>@customer.LastName</td>
+            <td>@customer.Phone</td>
+            <td>@customer.Email</td>
+            <td>@customer.Street</td>
+            <td>@customer.City</td>
+            <td>@customer.State</td>
+            <td>@customer.ZipCode</td>
+            <!--<td>@customer.Orders.Count</td>-->
+            <td>@customer.Orders.Count(o => o.OrderStatus == 1)</td>
+            <td>@customer.Orders.Count(o => o.OrderStatus == 2)</td>
+            <td>@customer.Orders.Count(o => o.OrderStatus == 3)</td>
+            <td>@customer.Orders.Count(o => o.OrderStatus == 4)</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="~/lib/datatables/jquery.dataTables.min.js"></script>
+    <link href="~/lib/datatables/jquery.dataTables.min.css" rel="stylesheet"/>
+    <script>
+        $(document).ready(function() {
+            $('#customersTable').DataTable({
+                responsive: true,
+            })
+        })
+    </script>
+}
