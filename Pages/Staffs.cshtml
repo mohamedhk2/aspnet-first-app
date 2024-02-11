@@ -1,0 +1,50 @@
+﻿@page
+@model StaffsModel
+@{
+    ViewData["Title"] = "Staffs";
+}
+<h1>@ViewData["Title"] (@Model.staffs.Count)</h1>
+
+<table id="table" class="display" style="width:100%">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>FirstName</th>
+        <th>LastName</th>
+        <th>Phone</th>
+        <th>Store Name</th>
+        <th>Supervised by</th>
+        <th>Is Manager</th>
+        <th>Nbr Supervised</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var staff in Model.staffs)
+    {
+        <tr>
+            <td>@staff.StaffId</td>
+            <td>@staff.FirstName</td>
+            <td>@staff.LastName</td>
+            <td>@staff.Phone</td>
+            <td>@staff.Store.StoreName</td>
+            <td>@(staff.Manager?.FullName ?? "--")</td>
+            <td>@(staff.InverseManager.Count > 0 ? "Yes" : "No")</td>
+            <td>@staff.InverseManager.Count</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="~/lib/datatables/jquery.dataTables.min.js"></script>
+    <link href="~/lib/datatables/jquery.dataTables.min.css" rel="stylesheet"/>
+    <script>
+        $(document).ready(function() {
+            $('#table').DataTable({
+                responsive: true,
+                order: [],
+                pageLength: 100,
+            })
+        })
+    </script>
+}

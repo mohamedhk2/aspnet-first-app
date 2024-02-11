@@ -5,7 +5,7 @@
 }
 <h1>@ViewData["Title"] (@Model.Products.Count)</h1>
 
-<table id="productsTable" class="display" style="width:100%">
+<table id="table" class="display" style="width:100%">
     <thead>
     <tr>
         <th rowspan=2>#</th>
@@ -52,7 +52,7 @@
     <link href="~/lib/datatables/jquery.dataTables.min.css" rel="stylesheet"/>
     <script>
         $(document).ready(function() {
-            $('#productsTable').DataTable({
+            $('#table').DataTable({
                 responsive: true,
                 order: [],
                 pageLength: 100,
