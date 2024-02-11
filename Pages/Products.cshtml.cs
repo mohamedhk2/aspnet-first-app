@@ -15,6 +15,7 @@ namespace MyFirstApp.Pages
         }
 
         public IList<Product> Products { get; set; }
+        public IList<Store> Stores { get; set; }
 
         public void OnGet()
         {
@@ -22,7 +23,9 @@ namespace MyFirstApp.Pages
                 .Include(product => product.Brand)
                 .Include(product => product.Category)
                 .Include(product => product.Stocks)
+                .Include(product => product.OrderItems)
                 .ToList();
+            Stores = dbContext.Stores.OrderBy(store => store.StoreName).ToList();
         }
     }
 }

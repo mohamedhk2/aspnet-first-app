@@ -1,0 +1,51 @@
+﻿@page
+@model ProductSearchModel
+@{
+    ViewData["Title"] = "Recherche Produit";
+}
+
+@if (Request.Method == "POST")
+{
+    @if (Model.product != null)
+    {
+        <h1>@Model.product.ProductName</h1>
+        <ul>
+            <li><b>Nombre de Commandes Passées:</b> @Model.product.OrderItems.DistinctBy(oi => oi.OrderId).Count()</li>
+            <li><b>Quantité commandée:</b> @Model.product.OrderItems.Sum(oi => oi.Quantity)</li>
+        </ul>
+        <table class="table">
+            <thead>
+            <tr>
+                <th colspan="@Model.Stores.Count">Qté Stock</th>
+            </tr>
+            <tr>
+                @foreach (var store in Model.Stores)
+                {
+                    <td>@store.StoreName</td>
+                }
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                @foreach (var store in Model.Stores)
+                {
+                    <td>@(Model.product.Stocks.FirstOrDefault(s => s.StoreId == store.StoreId)?.Quantity ?? 0)</td>
+                }
+            </tr>
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <h2>Produit non trouvé</h2>
+    }
+}
+else
+{
+    <h2>Recherche de produit</h2>
+    <form method="post">
+        <label for="productId">ID produit</label>
+        <input type="number" id="productId" name="productId" required="required"></input>
+        <input type="submit" value="Rechercher">
+    </form>
+}

@@ -8,21 +8,40 @@
 <table id="productsTable" class="display" style="width:100%">
     <thead>
     <tr>
-        <th>NomProduit</th>
-        <th>NomMarque</th>
-        <th>Categorie</th>
-        <th>Stock</th>
+        <th rowspan=2>#</th>
+        <th rowspan=2>NomProduit</th>
+        <th rowspan=2>NomMarque</th>
+        <th rowspan=2>Categorie</th>
+        <th colspan="@Model.Stores.Count">Stock</th>
+        <th rowspan=2>Orders</th>
+        <th rowspan=2>Quantity</th>
+    </tr>
+    <tr>
+        @foreach (var store in Model.Stores)
+        {
+            <td>@store.StoreName</td>
+        }
     </tr>
     </thead>
     <tbody>
     @foreach (var product in Model.Products)
     {
         <tr>
+            <td>@product.ProductId</td>
             <td>@product.ProductName</td>
             <td>@product.Brand.BrandName</td>
             <td>@product.Category.CategoryName</td>
-            @{ var quatite = product.Stocks.Sum(s => s.Quantity); }
-            <td>@(quatite > 0 ? quatite.ToString() : "Non disponible")</td>
+            
+            @*@{ var quatite = product.Stocks.Sum(s => s.Quantity); }
+            <td>@(quatite > 0 ? quatite.ToString() : "Non disponible")</td>*@
+            
+            @foreach (var store in Model.Stores)
+            {
+                <td>@(product.Stocks.FirstOrDefault(s => s.StoreId == store.StoreId)?.Quantity??0)</td>
+            }
+            
+            <td>@product.OrderItems.DistinctBy(oi => oi.OrderId).Count()</td>
+            <td>@product.OrderItems.Sum(oi => oi.Quantity)</td>
         </tr>
     }
     </tbody>
@@ -35,6 +54,8 @@
         $(document).ready(function() {
             $('#productsTable').DataTable({
                 responsive: true,
+                order: [],
+                pageLength: 100,
             })
         })
     </script>
